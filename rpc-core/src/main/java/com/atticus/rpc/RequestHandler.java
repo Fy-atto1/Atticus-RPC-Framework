@@ -1,4 +1,4 @@
-package com.atticus.rpc.server;
+package com.atticus.rpc;
 
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;

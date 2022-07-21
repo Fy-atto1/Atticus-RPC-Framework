@@ -1,5 +1,6 @@
-package com.atticus.rpc.client;
+package com.atticus.rpc.socket.client;
 
+import com.atticus.rpc.RpcClient;
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.ResponseCode;
@@ -14,13 +15,22 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * 进行远程调用的客户端
+ * Socket方式进行远程调用的客户端
  */
-public class RpcClient {
+public class SocketClient implements RpcClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
-    public Object sendRequest(RpcRequest rpcRequest, String host, int port) {
+    private final String host;
+    private final int port;
+
+    public SocketClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    @Override
+    public Object sendRequest(RpcRequest rpcRequest) {
         // 使用socket套接字实现TCP网络传输
         // 在try()中一般进行对资源的申请，若{}出现异常，()资源会自动关闭
         try (Socket socket = new Socket(host, port)) {
@@ -36,7 +46,8 @@ public class RpcClient {
             }
             if (rpcResponse.getStatusCode() == null
                     || rpcResponse.getStatusCode() != ResponseCode.SUCCESS.getCode()) {
-                logger.error("服务调用失败，service:{} response:{}" + rpcRequest.getInterfaceName(), rpcResponse);
+                logger.error("服务调用失败，service:{} response:{}"
+                        + rpcRequest.getInterfaceName(), rpcResponse);
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE,
                         "service:" + rpcRequest.getInterfaceName());
             }

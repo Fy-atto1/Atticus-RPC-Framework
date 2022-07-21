@@ -1,7 +1,8 @@
 package com.atticus.rpc.entity;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -9,8 +10,8 @@ import java.io.Serializable;
  * 传输格式：消费者（客户端）向提供者（服务端）发送的请求对象
  */
 @Data
-// 使用创建者模式，一次性给所有变量赋初始值
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RpcRequest implements Serializable {
 
     /**

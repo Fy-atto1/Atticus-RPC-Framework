@@ -3,12 +3,12 @@ package com.atticus.test;
 import com.atticus.rpc.api.HelloService;
 import com.atticus.rpc.registry.DefaultServiceRegistry;
 import com.atticus.rpc.registry.ServiceRegistry;
-import com.atticus.rpc.server.RpcServer;
+import com.atticus.rpc.socket.server.SocketServer;
 
 /**
  * 用于测试的服务提供方（服务端）
  */
-public class TestServer {
+public class SocketTestServer {
 
     public static void main(String[] args) {
         // 创建服务对象
@@ -18,9 +18,9 @@ public class TestServer {
         // 注册服务对象到服务容器中
         serviceRegistry.register(helloService);
         // 将服务容器纳入到服务端
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        SocketServer socketServer = new SocketServer(serviceRegistry);
         // 启动服务端
-        rpcServer.start(9000);
+        socketServer.start(9000);
     }
 
 }

@@ -2,6 +2,7 @@ package com.atticus.rpc.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
 
 // 自动提供类的get、set、equals、hashCode、canEqual、toString方法
 @Data
+@NoArgsConstructor
 // 添加一个含有所有已声明字段属性参数的构造函数
 @AllArgsConstructor
 public class HelloObject implements Serializable {

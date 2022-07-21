@@ -1,5 +1,6 @@
-package com.atticus.rpc.server;
+package com.atticus.rpc.socket.server;
 
+import com.atticus.rpc.RequestHandler;
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.registry.ServiceRegistry;
@@ -12,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * 处理客户端RpcRequest的工作线程
+ * IO传输模式|处理客户端RpcRequest的工作线程
  */
 public class RequestHandlerThread implements Runnable {
 

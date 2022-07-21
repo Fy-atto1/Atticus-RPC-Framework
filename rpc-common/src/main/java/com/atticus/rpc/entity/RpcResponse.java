@@ -2,6 +2,7 @@ package com.atticus.rpc.entity;
 
 import com.atticus.rpc.enumeration.ResponseCode;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * 提供者（服务端）执行完成后或出错后向消费者（客户端）返回的结果对象
  */
 @Data
+@NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
 
     /**
