@@ -2,6 +2,7 @@ package com.atticus.rpc.serializer;
 
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.enumeration.SerializerCode;
+import com.atticus.rpc.exception.SerializeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -25,8 +26,7 @@ public class JsonSerializer implements CommonSerializer {
             return objectMapper.writeValueAsBytes(obj);
         } catch (JsonProcessingException e) {
             logger.error("序列化时有错误发生：{}", e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new SerializeException("序列化时有错误发生");
         }
     }
 
@@ -40,8 +40,7 @@ public class JsonSerializer implements CommonSerializer {
             return obj;
         } catch (IOException e) {
             logger.error("反序列化时有错误发生：{}", e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new SerializeException("反序列化时有错误发生");
         }
     }
 

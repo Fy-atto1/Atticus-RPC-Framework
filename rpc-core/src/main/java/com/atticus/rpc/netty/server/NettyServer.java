@@ -3,7 +3,7 @@ package com.atticus.rpc.netty.server;
 import com.atticus.rpc.RpcServer;
 import com.atticus.rpc.codec.CommonDecoder;
 import com.atticus.rpc.codec.CommonEncoder;
-import com.atticus.rpc.serializer.KryoSerializer;
+import com.atticus.rpc.serializer.HessianSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -54,7 +54,7 @@ public class NettyServer implements RpcServer {
                             // 向管道中添加Handler，注意入站Handler与出站Handler都必须按照实际执行顺序添加
                             // 比如先解码再进行Server处理，那么Decoder()就要放在前面
                             // 但入站和出站Handler之间互不影响，这里就是先添加的出站Handler再添加入站Handler
-                            pipeline.addLast(new CommonEncoder(new KryoSerializer()))
+                            pipeline.addLast(new CommonEncoder(new HessianSerializer()))
                                     .addLast(new CommonDecoder())
                                     .addLast(new NettyServerHandler());
                         }

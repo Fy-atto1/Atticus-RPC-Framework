@@ -5,7 +5,7 @@ import com.atticus.rpc.codec.CommonDecoder;
 import com.atticus.rpc.codec.CommonEncoder;
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
-import com.atticus.rpc.serializer.KryoSerializer;
+import com.atticus.rpc.serializer.HessianSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -24,14 +24,6 @@ public class NettyClient implements RpcClient {
 
     private static final Bootstrap bootstrap;
 
-    private String host;
-    private int port;
-
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
-
     static {
         EventLoopGroup group = new NioEventLoopGroup();
         bootstrap = new Bootstrap();
@@ -43,10 +35,18 @@ public class NettyClient implements RpcClient {
                     protected void initChannel(SocketChannel channel) throws Exception {
                         ChannelPipeline pipeline = channel.pipeline();
                         pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new KryoSerializer()))
+                                .addLast(new CommonEncoder(new HessianSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });
+    }
+
+    private String host;
+    private int port;
+
+    public NettyClient(String host, int port) {
+        this.host = host;
+        this.port = port;
     }
 
     @Override
