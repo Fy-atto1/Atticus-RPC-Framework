@@ -16,6 +16,7 @@ public class JsonSerializer implements CommonSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
+    // ObjectMapper支持线程安全
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -45,7 +46,7 @@ public class JsonSerializer implements CommonSerializer {
     }
 
     /**
-     * 由于在使用Json序列化和反序列化Object数组时，无法保证反序列化后仍然为原实例类，所以需要重新判断处理
+     * 使用JSON反序列化Object数组，无法保证反序列化后仍然为原实例类，通常直接被反序列化为String类型，因此要特殊处理
      *
      * @param obj RpcRequest对象
      * @return 对parameters字段重新进行反序列化后的RpcRequest对象
@@ -66,6 +67,6 @@ public class JsonSerializer implements CommonSerializer {
 
     @Override
     public int getCode() {
-        return SerializerCode.valueOf("JSON").getCode();
+        return SerializerCode.JSON.getCode();
     }
 }
