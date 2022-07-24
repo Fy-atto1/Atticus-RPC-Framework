@@ -2,7 +2,6 @@ package com.atticus.rpc.netty.server;
 
 import com.atticus.rpc.RequestHandler;
 import com.atticus.rpc.entity.RpcRequest;
-import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.registry.DefaultServiceRegistry;
 import com.atticus.rpc.registry.ServiceRegistry;
 import io.netty.channel.ChannelFuture;
@@ -34,8 +33,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
             logger.info("服务端接收到请求：{}", rpcRequest);
             String interfaceName = rpcRequest.getInterfaceName();
             Object service = serviceRegistry.getService(interfaceName);
-            Object result = requestHandler.handle(rpcRequest, service);
-            ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
+            Object response = requestHandler.handle(rpcRequest, service);
+            ChannelFuture future = ctx.writeAndFlush(response);
             // 添加一个监听器到channelFuture来检测是否所有的数据包都发出，然后关闭通道
             future.addListener(ChannelFutureListener.CLOSE);
         } finally {

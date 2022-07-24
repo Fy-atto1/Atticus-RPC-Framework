@@ -8,6 +8,7 @@ import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
 import com.atticus.rpc.serializer.CommonSerializer;
+import com.atticus.rpc.util.RpcMessageChecker;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -77,9 +78,10 @@ public class NettyClient implements RpcClient {
                 channel.closeFuture().sync();
                 // AttributeMap<AttributeKey, AttributeValue>是绑定在Channel上的
                 // 可以设置用来获取通道对象
-                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse");
+                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
                 // get()阻塞获取value
                 RpcResponse rpcResponse = channel.attr(key).get();
+                RpcMessageChecker.check(rpcRequest, rpcResponse);
                 return rpcResponse.getData();
             }
         } catch (InterruptedException e) {

@@ -3,12 +3,12 @@ package com.atticus.rpc.socket.client;
 import com.atticus.rpc.RpcClient;
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
-import com.atticus.rpc.enumeration.ResponseCode;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
 import com.atticus.rpc.serializer.CommonSerializer;
 import com.atticus.rpc.socket.util.ObjectReader;
 import com.atticus.rpc.socket.util.ObjectWriter;
+import com.atticus.rpc.util.RpcMessageChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,18 +48,7 @@ public class SocketClient implements RpcClient {
             ObjectWriter.writeObject(outputStream, rpcRequest, serializer);
             Object obj = ObjectReader.readObject(inputStream);
             RpcResponse rpcResponse = (RpcResponse) obj;
-            if (rpcResponse == null) {
-                logger.error("服务调用失败，service:{}" + rpcRequest.getInterfaceName());
-                throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE,
-                        "service:" + rpcRequest.getInterfaceName());
-            }
-            if (rpcResponse.getStatusCode() == null
-                    || rpcResponse.getStatusCode() != ResponseCode.SUCCESS.getCode()) {
-                logger.error("服务调用失败，service:{} response:{}"
-                        + rpcRequest.getInterfaceName(), rpcResponse);
-                throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE,
-                        "service:" + rpcRequest.getInterfaceName());
-            }
+            RpcMessageChecker.check(rpcRequest, rpcResponse);
             return rpcResponse.getData();
         } catch (IOException e) {
             logger.error("调用时有错误发生：" + e);

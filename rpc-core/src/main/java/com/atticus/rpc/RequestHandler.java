@@ -1,6 +1,8 @@
 package com.atticus.rpc;
 
 import com.atticus.rpc.entity.RpcRequest;
+import com.atticus.rpc.entity.RpcResponse;
+import com.atticus.rpc.enumeration.ResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,25 +24,20 @@ public class RequestHandler {
         } catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException e) {
             logger.error("调用或发送时有错误发生：" + e);
         }
-        return result;
+        return RpcResponse.success(result, rpcRequest.getRequestId());
     }
 
     private Object invokeTargetMethod(RpcRequest rpcRequest, Object service)
             throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
-        Method method = null;
+        Method method;
         try {
             // getClass()获取的是实例对象的类型
             method = service.getClass()
                     .getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
         } catch (NoSuchMethodException e) {
-            logger.error("调用或发送时有错误发生：" + e);
+            return RpcResponse.fail(ResponseCode.METHOD_NOT_FOUND, rpcRequest.getRequestId());
         }
-        if (method != null) {
-            return method.invoke(service, rpcRequest.getParameters());
-        } else {
-            logger.info("未找到指定方法");
-            return null;
-        }
+        return method.invoke(service, rpcRequest.getParameters());
     }
 
 }

@@ -23,7 +23,7 @@ public class SocketTestServer {
         RpcServer server = new SocketServer(serviceRegistry);
         server.setSerializer(new HessianSerializer());
         // 启动服务端
-        server.start(9000);
+        server.start(9999);
     }
 
 }

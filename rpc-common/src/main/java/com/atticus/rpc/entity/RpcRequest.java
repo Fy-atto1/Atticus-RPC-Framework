@@ -7,12 +7,17 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 传输格式：消费者（客户端）向提供者（服务端）发送的请求对象
+ * 传输格式：消费者（客户端）向提供者（服务端）传输的请求对象
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RpcRequest implements Serializable {
+
+    /**
+     * 请求号
+     */
+    private String requestId;
 
     /**
      * 待调用接口名称

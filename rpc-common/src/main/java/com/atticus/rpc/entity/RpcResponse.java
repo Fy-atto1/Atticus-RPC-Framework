@@ -7,11 +7,16 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 提供者（服务端）执行完成后或出错后向消费者（客户端）返回的结果对象
+ * 提供者（服务端）处理完成后，向消费者（客户端）返回的结果对象
  */
 @Data
 @NoArgsConstructor
 public class RpcResponse<T> implements Serializable {
+
+    /**
+     * 响应对应的请求号
+     */
+    private String requestId;
 
     /**
      * 响应状态码
@@ -35,8 +40,9 @@ public class RpcResponse<T> implements Serializable {
      * @param <T>  泛型
      * @return 结果对象
      */
-    public static <T> RpcResponse<T> success(T data) {
+    public static <T> RpcResponse<T> success(T data, String requestId) {
         RpcResponse<T> response = new RpcResponse<>();
+        response.setRequestId(requestId);
         response.setStatusCode(ResponseCode.SUCCESS.getCode());
         response.setData(data);
         return response;
@@ -49,8 +55,9 @@ public class RpcResponse<T> implements Serializable {
      * @param <T>          泛型
      * @return 结果对象
      */
-    public static <T> RpcResponse<T> fail(ResponseCode responseCode) {
+    public static <T> RpcResponse<T> fail(ResponseCode responseCode, String requestId) {
         RpcResponse<T> response = new RpcResponse<>();
+        response.setRequestId(requestId);
         response.setStatusCode(responseCode.getCode());
         response.setMessage(responseCode.getMessage());
         return response;
