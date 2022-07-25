@@ -51,7 +51,7 @@ public class NettyServer implements RpcServer {
                     // 可以将此功能视为TCP的心跳机制，默认的心跳间隔是7200s，即2小时
                     // 理解可参考：https://blog.csdn.net/lclwjl/article/details/80154565
                     .option(ChannelOption.SO_KEEPALIVE, true)
-                    // 配置Channel参数，nodelay没有延迟，true表示禁用Nagle算法，较小传输延迟
+                    // 配置Channel参数，nodelay没有延迟，true表示禁用Nagle算法，减小传输延迟
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     // 初始化Handler，设置Handler操作
                     .childHandler(new ChannelInitializer<SocketChannel>() {
