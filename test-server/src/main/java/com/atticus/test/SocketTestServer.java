@@ -25,5 +25,4 @@ public class SocketTestServer {
         // 启动服务端
         server.start(9999);
     }
-
 }

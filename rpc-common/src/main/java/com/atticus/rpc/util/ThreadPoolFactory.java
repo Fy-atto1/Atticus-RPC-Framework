@@ -1,12 +1,14 @@
 package com.atticus.rpc.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.NoArgsConstructor;
 
 import java.util.concurrent.*;
 
 /**
  * 创建ThreadPool（线程池）的工具类
  */
+@NoArgsConstructor
 public class ThreadPoolFactory {
 
     /**
@@ -17,8 +19,6 @@ public class ThreadPoolFactory {
     private static final int KEEP_ALIVE_TIME = 1;
     private static final int BLOCKING_QUEUE_CAPACITY = 100;
 
-    private ThreadPoolFactory() {
-    }
 
     public static ExecutorService createDefaultThreadPool(String threadNamePrefix) {
         return createDefaultThreadPool(threadNamePrefix, false);
@@ -28,6 +28,7 @@ public class ThreadPoolFactory {
         // 设置上限为100个线程的阻塞队列
         BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(BLOCKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = createThreadFactory(threadNamePrefix, daemon);
+        // 创建线程池
         return new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, KEEP_ALIVE_TIME,
                 TimeUnit.MINUTES, workQueue, threadFactory);
     }
