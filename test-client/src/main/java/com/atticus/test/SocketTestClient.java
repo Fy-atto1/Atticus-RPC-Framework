@@ -1,19 +1,19 @@
 package com.atticus.test;
 
-import com.atticus.rpc.RpcClient;
-import com.atticus.rpc.RpcClientProxy;
 import com.atticus.rpc.api.HelloObject;
 import com.atticus.rpc.api.HelloService;
 import com.atticus.rpc.serializer.KryoSerializer;
-import com.atticus.rpc.socket.client.SocketClient;
+import com.atticus.rpc.transport.RpcClient;
+import com.atticus.rpc.transport.RpcClientProxy;
+import com.atticus.rpc.transport.socket.client.SocketClient;
 
 /**
- * 用于测试的客户端
+ * 测试用Socket客户端
  */
 public class SocketTestClient {
 
     public static void main(String[] args) {
-        RpcClient client = new SocketClient("127.0.0.1", 9999);
+        RpcClient client = new SocketClient();
         client.setSerializer(new KryoSerializer());
         // 接口与代理对象之间的中介对象
         RpcClientProxy proxy = new RpcClientProxy(client);

@@ -1,4 +1,4 @@
-package com.atticus.rpc;
+package com.atticus.rpc.transport;
 
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.serializer.CommonSerializer;

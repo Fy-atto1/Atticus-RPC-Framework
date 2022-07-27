@@ -1,11 +1,13 @@
-package com.atticus.rpc.netty.client;
+package com.atticus.rpc.transport.netty.client;
 
-import com.atticus.rpc.RpcClient;
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
+import com.atticus.rpc.register.NacosServiceRegistry;
+import com.atticus.rpc.register.ServiceRegistry;
 import com.atticus.rpc.serializer.CommonSerializer;
+import com.atticus.rpc.transport.RpcClient;
 import com.atticus.rpc.util.RpcMessageChecker;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
@@ -22,14 +24,12 @@ public class NettyClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
+    private final ServiceRegistry serviceRegistry;
+
     private CommonSerializer serializer;
 
-    private String host;
-    private int port;
-
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public NettyClient() {
+        serviceRegistry = new NacosServiceRegistry();
     }
 
     @Override
@@ -41,7 +41,10 @@ public class NettyClient implements RpcClient {
         // 保证自定义实体类变量的原子性和共享性的线程安全，此处应用于RpcResponse
         AtomicReference<Object> result = new AtomicReference<>(null);
         try {
-            Channel channel = ChannelProvider.get(new InetSocketAddress(host, port), serializer);
+            // 从Nacos获取提供对应服务的服务端地址
+            InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+            // 创建Netty通道连接
+            Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
             if (channel.isActive()) {
                 // 向服务端发送请求，并设置监听
                 // 关于writeAndFlush()的具体实现可以参考如下网址

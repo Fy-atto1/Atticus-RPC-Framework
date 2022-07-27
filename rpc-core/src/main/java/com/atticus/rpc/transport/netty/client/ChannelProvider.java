@@ -1,4 +1,4 @@
-package com.atticus.rpc.netty.client;
+package com.atticus.rpc.transport.netty.client;
 
 import com.atticus.rpc.codec.CommonDecoder;
 import com.atticus.rpc.codec.CommonEncoder;

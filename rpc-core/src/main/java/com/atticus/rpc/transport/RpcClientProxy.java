@@ -1,4 +1,4 @@
-package com.atticus.rpc;
+package com.atticus.rpc.transport;
 
 import com.atticus.rpc.entity.RpcRequest;
 import org.slf4j.Logger;
@@ -36,5 +36,4 @@ public class RpcClientProxy implements InvocationHandler {
                 method.getName(), args, method.getParameterTypes());
         return client.sendRequest(rpcRequest);
     }
-
 }

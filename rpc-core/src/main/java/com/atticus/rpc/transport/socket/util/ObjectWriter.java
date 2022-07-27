@@ -1,4 +1,4 @@
-package com.atticus.rpc.socket.util;
+package com.atticus.rpc.transport.socket.util;
 
 import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.enumeration.PackageType;
