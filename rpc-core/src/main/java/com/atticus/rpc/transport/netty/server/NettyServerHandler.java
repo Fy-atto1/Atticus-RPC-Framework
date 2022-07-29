@@ -1,8 +1,8 @@
 package com.atticus.rpc.transport.netty.server;
 
 import com.atticus.rpc.entity.RpcRequest;
+import com.atticus.rpc.factory.ThreadPoolFactory;
 import com.atticus.rpc.handler.RequestHandler;
-import com.atticus.rpc.util.ThreadPoolFactory;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -21,11 +21,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
 
     private static final String THREAD_NAME_PREFIX = "netty-server-handler";
-    private static final ExecutorService threadPool;
 
-    private static RequestHandler requestHandler;
+    private final ExecutorService threadPool;
+    private final RequestHandler requestHandler;
 
-    static {
+    public NettyServerHandler() {
         requestHandler = new RequestHandler();
         // 引入异步业务线程池，避免长时间的耗时业务阻塞Netty本身的worker工作线程，耽误了同一个Selector中其他任务的执行
         threadPool = ThreadPoolFactory.createDefaultThreadPool(THREAD_NAME_PREFIX);

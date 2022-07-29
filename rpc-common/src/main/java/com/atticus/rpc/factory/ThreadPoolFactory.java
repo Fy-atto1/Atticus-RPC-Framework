@@ -1,4 +1,4 @@
-package com.atticus.rpc.util;
+package com.atticus.rpc.factory;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.NoArgsConstructor;

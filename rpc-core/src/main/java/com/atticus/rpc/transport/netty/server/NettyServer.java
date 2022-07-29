@@ -4,6 +4,7 @@ import com.atticus.rpc.codec.CommonDecoder;
 import com.atticus.rpc.codec.CommonEncoder;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
+import com.atticus.rpc.hook.ShutdownHook;
 import com.atticus.rpc.provider.ServiceProvider;
 import com.atticus.rpc.provider.ServiceProviderImpl;
 import com.atticus.rpc.register.NacosServiceRegistry;
@@ -103,6 +104,8 @@ public class NettyServer implements RpcServer {
             // 绑定端口，启动Netty，sync()代表阻塞主线程，以执行Netty线程
             // 如果不阻塞，那么Netty会被直接shutdown
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
+            // 添加注销服务的钩子，服务端关闭时才会执行
+            ShutdownHook.getShutdownHook().addClearAllHook();
             // 等到确定通道关闭了，关闭future回到主Server线程
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {

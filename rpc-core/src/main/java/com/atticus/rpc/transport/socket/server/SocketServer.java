@@ -2,14 +2,15 @@ package com.atticus.rpc.transport.socket.server;
 
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
+import com.atticus.rpc.factory.ThreadPoolFactory;
 import com.atticus.rpc.handler.RequestHandler;
+import com.atticus.rpc.hook.ShutdownHook;
 import com.atticus.rpc.provider.ServiceProvider;
 import com.atticus.rpc.provider.ServiceProviderImpl;
 import com.atticus.rpc.register.NacosServiceRegistry;
 import com.atticus.rpc.register.ServiceRegistry;
 import com.atticus.rpc.serializer.CommonSerializer;
 import com.atticus.rpc.transport.RpcServer;
-import com.atticus.rpc.util.ThreadPoolFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,13 +68,16 @@ public class SocketServer implements RpcServer {
      */
     @Override
     public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try (ServerSocket serverSocket = new ServerSocket()) {
+            serverSocket.bind(new InetSocketAddress(host, port));
             logger.info("服务器启动......");
+            // 添加钩子，服务端关闭时会注销服务
+            ShutdownHook.getShutdownHook().addClearAllHook();
             Socket socket;
             // 当未接收到连接请求时，accept()会一直阻塞
             while ((socket = serverSocket.accept()) != null) {
                 logger.info("客户端连接！{}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket, requestHandler, serializer));
+                threadPool.execute(new SocketRequestHandlerThread(socket, requestHandler, serializer));
             }
             threadPool.shutdown();
         } catch (IOException e) {
