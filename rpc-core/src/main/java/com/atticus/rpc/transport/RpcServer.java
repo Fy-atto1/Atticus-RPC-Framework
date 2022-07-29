@@ -18,5 +18,5 @@ public interface RpcServer {
      * @param serviceClass 服务实体对应的类
      * @param <T>          泛型
      */
-    <T> void publishService(Object service, Class<T> serviceClass);
+    <T> void publishService(T service, Class<T> serviceClass);
 }

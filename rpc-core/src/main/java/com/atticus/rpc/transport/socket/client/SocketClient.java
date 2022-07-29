@@ -4,8 +4,8 @@ import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
-import com.atticus.rpc.register.NacosServiceRegistry;
-import com.atticus.rpc.register.ServiceRegistry;
+import com.atticus.rpc.register.NacosServiceDiscovery;
+import com.atticus.rpc.register.ServiceDiscovery;
 import com.atticus.rpc.serializer.CommonSerializer;
 import com.atticus.rpc.transport.RpcClient;
 import com.atticus.rpc.transport.socket.util.ObjectReader;
@@ -27,12 +27,12 @@ public class SocketClient implements RpcClient {
 
     private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
     private CommonSerializer serializer;
 
     public SocketClient() {
-        serviceRegistry = new NacosServiceRegistry();
+        serviceDiscovery = new NacosServiceDiscovery();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SocketClient implements RpcClient {
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
         // 从Nacos中获取提供对应服务的服务端地址
-        InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest.getInterfaceName());
         // 使用socket套接字实现TCP网络传输
         // 在try()中一般进行对资源的申请，若{}出现异常，()资源会自动关闭
         try (Socket socket = new Socket()) {

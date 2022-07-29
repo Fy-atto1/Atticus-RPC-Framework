@@ -11,7 +11,7 @@ import com.atticus.rpc.transport.socket.server.SocketServer;
 public class SocketTestServer {
 
     public static void main(String[] args) {
-        HelloService helloService = new HelloServiceImpl();
+        HelloService helloService = new HelloServiceImpl2();
         RpcServer server = new SocketServer("127.0.0.1", 9998);
         server.setSerializer(new HessianSerializer());
         // 启动服务端
