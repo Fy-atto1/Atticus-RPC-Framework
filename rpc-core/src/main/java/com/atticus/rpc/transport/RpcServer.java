@@ -7,9 +7,9 @@ import com.atticus.rpc.serializer.CommonSerializer;
  */
 public interface RpcServer {
 
-    void start();
+    int DEFAULT_SERIALIZER = CommonSerializer.KRYO_SERIALIZER;
 
-    void setSerializer(CommonSerializer serializer);
+    void start();
 
     /**
      * 向Nacos注册服务
