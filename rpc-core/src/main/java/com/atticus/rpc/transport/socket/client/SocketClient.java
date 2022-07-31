@@ -4,6 +4,8 @@ import com.atticus.rpc.entity.RpcRequest;
 import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
+import com.atticus.rpc.loadbalancer.LoadBalancer;
+import com.atticus.rpc.loadbalancer.RandomLoadBalancer;
 import com.atticus.rpc.register.NacosServiceDiscovery;
 import com.atticus.rpc.register.ServiceDiscovery;
 import com.atticus.rpc.serializer.CommonSerializer;
@@ -31,11 +33,19 @@ public class SocketClient implements RpcClient {
     private final CommonSerializer serializer;
 
     public SocketClient() {
-        this(DEFAULT_SERIALIZER);
+        this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
+    }
+
+    public SocketClient(LoadBalancer loadBalancer) {
+        this(DEFAULT_SERIALIZER, loadBalancer);
     }
 
     public SocketClient(Integer serializerCode) {
-        serviceDiscovery = new NacosServiceDiscovery();
+        this(serializerCode, new RandomLoadBalancer());
+    }
+
+    public SocketClient(Integer serializerCode, LoadBalancer loadBalancer) {
+        serviceDiscovery = new NacosServiceDiscovery(loadBalancer);
         serializer = CommonSerializer.getByCode(serializerCode);
     }
 

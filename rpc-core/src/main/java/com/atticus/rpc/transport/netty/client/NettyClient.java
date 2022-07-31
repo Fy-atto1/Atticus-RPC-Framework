@@ -5,6 +5,8 @@ import com.atticus.rpc.entity.RpcResponse;
 import com.atticus.rpc.enumeration.RpcError;
 import com.atticus.rpc.exception.RpcException;
 import com.atticus.rpc.factory.SingletonFactory;
+import com.atticus.rpc.loadbalancer.LoadBalancer;
+import com.atticus.rpc.loadbalancer.RandomLoadBalancer;
 import com.atticus.rpc.register.NacosServiceDiscovery;
 import com.atticus.rpc.register.ServiceDiscovery;
 import com.atticus.rpc.serializer.CommonSerializer;
@@ -44,11 +46,19 @@ public class NettyClient implements RpcClient {
     private final UnprocessedRequests unprocessedRequests;
 
     public NettyClient() {
-        this(DEFAULT_SERIALIZER);
+        this(DEFAULT_SERIALIZER, new RandomLoadBalancer());
+    }
+
+    public NettyClient(LoadBalancer loadBalancer) {
+        this(DEFAULT_SERIALIZER, loadBalancer);
     }
 
     public NettyClient(Integer serializerCode) {
-        serviceDiscovery = new NacosServiceDiscovery();
+        this(serializerCode, new RandomLoadBalancer());
+    }
+
+    public NettyClient(Integer serializerCode, LoadBalancer loadBalancer) {
+        serviceDiscovery = new NacosServiceDiscovery(loadBalancer);
         serializer = CommonSerializer.getByCode(serializerCode);
         unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
     }
