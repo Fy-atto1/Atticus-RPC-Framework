@@ -2,6 +2,8 @@ package com.atticus.rpc.register;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.atticus.rpc.enumeration.RpcError;
+import com.atticus.rpc.exception.RpcException;
 import com.atticus.rpc.loadbalancer.LoadBalancer;
 import com.atticus.rpc.loadbalancer.RandomLoadBalancer;
 import com.atticus.rpc.util.NacosUtil;
@@ -41,6 +43,10 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
             List<Instance> instances = NacosUtil.getAllInstance(serviceName);
             // 负载均衡获取一个服务实体
             Instance instance = loadBalancer.select(instances);
+            if (instances.size() == 0) {
+                logger.error("找不到对应服务：" + serviceName);
+                throw new RpcException(RpcError.SERVICE_NOT_FOUND);
+            }
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {
             logger.error("获取服务时有错误发生");

@@ -1,5 +1,6 @@
 package com.atticus.test;
 
+import com.atticus.rpc.annotation.Service;
 import com.atticus.rpc.api.HelloObject;
 import com.atticus.rpc.api.HelloService;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 服务端api接口实现
  */
+@Service
 public class HelloServiceImpl implements HelloService {
 
     /**
@@ -19,7 +21,7 @@ public class HelloServiceImpl implements HelloService {
     public String hello(HelloObject object) {
         // 使用{}可以直接将getMessage()内容输出
         logger.info("接收到消息：{}", object.getMessage());
-        return "本次处理来自Netty服务";
+        return "成功调用hello()方法";
     }
 
 }

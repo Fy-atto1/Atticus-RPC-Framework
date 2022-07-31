@@ -1,5 +1,6 @@
 package com.atticus.test;
 
+import com.atticus.rpc.api.ByeService;
 import com.atticus.rpc.api.HelloObject;
 import com.atticus.rpc.api.HelloService;
 import com.atticus.rpc.serializer.CommonSerializer;
@@ -19,5 +20,7 @@ public class NettyTestClient {
         HelloObject helloObject = new HelloObject(12, "this is netty style");
         String res = helloService.hello(helloObject);
         System.out.println(res);
+        ByeService byeService = rpcClientProxy.getProxy(ByeService.class);
+        System.out.println(byeService.bye("Netty"));
     }
 }

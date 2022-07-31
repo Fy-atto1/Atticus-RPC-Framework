@@ -1,5 +1,6 @@
 package com.atticus.test;
 
+import com.atticus.rpc.api.ByeService;
 import com.atticus.rpc.api.HelloObject;
 import com.atticus.rpc.api.HelloService;
 import com.atticus.rpc.loadbalancer.RoundRobinLoadBalancer;
@@ -21,10 +22,10 @@ public class SocketTestClient {
         HelloService helloService = proxy.getProxy(HelloService.class);
         // 创建接口方法的参数对象
         HelloObject object = new HelloObject(12, "This is test message");
-        for (int i = 0; i < 20; i++) {
-            // 由动态代理可知，代理对象调用hello()实际会执行invoke()
-            String res = helloService.hello(object);
-            System.out.println(res);
-        }
+        // 由动态代理可知，代理对象调用hello()实际会执行invoke()
+        String res = helloService.hello(object);
+        System.out.println(res);
+        ByeService byeService = proxy.getProxy(ByeService.class);
+        System.out.println(byeService.bye("Socket"));
     }
 }
