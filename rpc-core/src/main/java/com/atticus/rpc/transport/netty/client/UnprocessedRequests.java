@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 未处理的请求（对所有客户端请求进行统一管理）
+ * 未处理的请求（对所有Netty客户端请求进行统一管理）
  */
 public class UnprocessedRequests {
 

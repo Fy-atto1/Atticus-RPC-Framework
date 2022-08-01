@@ -17,6 +17,9 @@ import java.util.jar.JarFile;
  */
 public class ReflectUtil {
 
+    /**
+     * 从栈底获取main()方法所在的启动类的类名
+     */
     public static String getStackTrace() {
         StackTraceElement[] stack = new Throwable().getStackTrace();
         return stack[stack.length - 1].getClassName();
